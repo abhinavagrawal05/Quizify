@@ -16,6 +16,19 @@ app.use("/api/exams", examsRoute);
 app.use("/api/reports", reportsRoute);
 
 const port = process.env.port || 5000;
+
+
+// deployment config
+const path = require("path");
+__dirname = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "/client/build")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+    });
+}
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 })
